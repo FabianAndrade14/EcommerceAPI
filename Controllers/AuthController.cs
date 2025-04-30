@@ -1,12 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EcommerceAPI.Data;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace EcommerceAPI.Controllers
 {
-    public class AuthController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly EcommerceContext _context;
+        private readonly IConfiguration _configuration;
+
+        public AuthController(EcommerceContext context, IConfiguration configuration)
         {
-            return View();
+            _context = context;
+            _configuration = configuration;
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserDto request)
+        {
+
         }
     }
 }
