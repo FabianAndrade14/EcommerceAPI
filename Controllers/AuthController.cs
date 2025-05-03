@@ -1,5 +1,7 @@
 ﻿using EcommerceAPI.Data;
+using EcommerceAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using EcommerceAPI.Services;
 using System;
 
 namespace EcommerceAPI.Controllers
@@ -8,19 +10,31 @@ namespace EcommerceAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly EcommerceContext _context;
-        private readonly IConfiguration _configuration;
+        private readonly UserService _userService;
 
-        public AuthController(EcommerceContext context, IConfiguration configuration)
+        public AuthController(UserService userService)
         {
-            _context = context;
-            _configuration = configuration;
+            _userService = userService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserDto request)
+        public async Task<IActionResult> Register(UserRegisterDTO dto)
         {
+            var user = await _userService.RegisterUserAsync(dto);
+            if (user == null)
+                return BadRequest("Email ya registrado");
 
+            return Ok(new { user.Id, user.UserName, user.Email });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(UserLoginDTO dto)
+        {
+            var user = await _userService.AuthenticateAsync(dto);
+            if (user == null)
+                return Unauthorized("Credenciales inválidas");
+
+            return Ok(new { message = "Login exitoso", user.Id, user.UserName });
         }
     }
 }
