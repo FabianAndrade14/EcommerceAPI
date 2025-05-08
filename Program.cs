@@ -1,4 +1,5 @@
 using EcommerceAPI.Data;
+using EcommerceAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<UserService>();
 
 //Configuración de SQL Server
 builder.Services.AddDbContext<EcommerceContext>(options =>
