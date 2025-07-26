@@ -1,5 +1,6 @@
 using EcommerceAPI.Data;
 using EcommerceAPI.Services;
+using FirebaseAdmin;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<UserService>();
+
+// Configuración de Firebase
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.FromFile("firebase-key.json"),
+});
 
 //Configuración de SQL Server
 builder.Services.AddDbContext<EcommerceContext>(options =>
